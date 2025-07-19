@@ -1,54 +1,59 @@
-# Welcome to your Lovable project
 
-## Project info
+# Liquid Bluds Portfolio
 
-**URL**: https://lovable.dev/projects/57cda375-9927-4cd3-8026-1d41347d0818
+## Project Overview
 
-## How can I edit this code?
+This is a modern developer portfolio web application built with React, TypeScript, Vite, shadcn-ui, and Tailwind CSS. It showcases projects, skills, education, and contact information in a visually appealing, accessible, and responsive layout.
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/57cda375-9927-4cd3-8026-1d41347d0818) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+To run this project locally:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/Shresth-Senwal/liquid-bluds-portfolio.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd liquid-bluds-portfolio
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080` (or the next available port).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Technologies Used
 
-**Use GitHub Codespaces**
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deployment
+
+You can deploy this project to any static hosting provider (e.g., Vercel, Netlify, GitHub Pages) by building the production assets:
+
+```sh
+npm run build
+```
+
+Then upload the contents of the `dist` folder to your chosen host.
+
+## Custom Domain
+
+To use a custom domain, follow your hosting provider's instructions for domain setup and DNS configuration.
+
+## Contributing
+
+Pull requests and issues are welcome! Please follow the code style and contribution guidelines in the repository.
+
+## License
+
+This project is open source and available under the MIT License.
 
 ## What technologies are used for this project?
 
