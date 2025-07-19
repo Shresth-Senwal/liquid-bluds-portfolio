@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { GradientText } from '../animated/GradientText';
 import { RotatingText } from '../animated/RotatingText';
-import { Lanyard3D } from '../animated/Lanyard3D';
-import { StarBorder } from '../animated/StarBorder';
-import { Button } from '@/components/ui/button';
+import { GlassButton } from '@/components/ui/glass-button';
+import RippleGrid from '@/components/animated/RippleGrid';
+import BlurText from '../ui/BlurText';
 
 interface HeroSectionProps {
   className?: string;
@@ -12,11 +12,11 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
   const roles = [
+    'B.Tech CSE Student',
     'Full-Stack Developer',
-    'UI/UX Enthusiast', 
-    'Creative Coder',
-    'Problem Solver',
-    'Tech Innovator'
+    'Web Development Enthusiast',
+    'Java & Node.js Developer',
+    'Problem Solver'
   ];
 
   const scrollToProjects = () => {
@@ -28,6 +28,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
 
   return (
     <section className={`min-h-screen flex items-center justify-center relative overflow-hidden ${className}`}>
+      {/* Background grid - only in hero section */}
+      <div className="absolute inset-0 w-full h-full">
+        <RippleGrid
+          enableRainbow={false}
+          gridColor="#9333ea"
+          rippleIntensity={0.15}
+          gridSize={6}
+          gridThickness={25}
+          mouseInteraction={true}
+          mouseInteractionRadius={2.5}
+          opacity={0.9}
+          glowIntensity={0.3}
+          fadeDistance={2.5}
+          vignetteStrength={1.2}
+        />
+      </div>
+
       {/* Background effects */}
       <motion.div
         className="absolute inset-0"
@@ -35,9 +52,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
       >
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-portfolio-purple/20 rounded-full filter blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-portfolio-cyan/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-portfolio-green/10 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-portfolio-purple/25 rounded-full filter blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-portfolio-purple-light/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-portfolio-accent/15 rounded-full filter blur-3xl" />
       </motion.div>
 
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
@@ -47,9 +64,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <GradientText className="text-5xl md:text-7xl font-bold mb-6">
-            Alex Developer
-          </GradientText>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
+            Divye Bisaria
+          </h1>
+          <BlurText
+            text="3rd-year B.Tech CSE student passionate about web development"
+            delay={150}
+            animateBy="words"
+            direction="top"
+            className="text-2xl mb-8 text-white"
+          />
         </motion.div>
 
         {/* Rotating role text */}
@@ -61,18 +85,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
         >
           <RotatingText 
             texts={roles}
-            className="text-xl md:text-2xl h-8"
+            className="text-xl md:text-2xl h-8 text-white font-medium"
           />
-        </motion.div>
-
-        {/* 3D Lanyard for team name */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="mb-12"
-        >
-          <Lanyard3D />
         </motion.div>
 
         {/* Call to action */}
@@ -81,14 +95,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.4 }}
         >
-          <StarBorder>
-            <Button
-              onClick={scrollToProjects}
-              className="bg-transparent hover:bg-white/10 text-white border-none text-lg px-8 py-6 rounded-lg transition-all duration-300"
-            >
-              View My Work
-            </Button>
-          </StarBorder>
+          <GlassButton
+            onClick={scrollToProjects}
+            size="lg"
+            variant="primary"
+          >
+            View My Work
+          </GlassButton>
         </motion.div>
       </div>
 
@@ -99,8 +112,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 2, repeat: Infinity, repeatType: "reverse" }}
       >
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
+        <div className="w-6 h-10 border-2 border-portfolio-purple-light/50 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-portfolio-purple-light/80 rounded-full mt-2 animate-pulse" />
         </div>
       </motion.div>
     </section>

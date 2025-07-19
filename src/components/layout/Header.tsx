@@ -8,12 +8,13 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
-      setIsVisible(scrolled > 100);
+      // Always keep header visible, just adjust opacity
+      setIsVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -21,6 +22,10 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -37,19 +42,22 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   return (
     <motion.header
       className={`fixed top-0 left-0 right-0 z-50 ${className}`}
-      initial={{ y: -100, opacity: 0 }}
+      initial={{ y: 0, opacity: 1 }}
       animate={{ 
-        y: isVisible ? 0 : -100, 
-        opacity: isVisible ? 1 : 0 
+        y: 0, 
+        opacity: 1 
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="backdrop-blur-md bg-portfolio-bg/80 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <MetallicPaint className="text-2xl font-bold cursor-pointer">
-            BD
-          </MetallicPaint>
+          <button 
+            onClick={() => scrollToSection('top')}
+            className="text-2xl font-bold cursor-pointer text-gray-300 hover:text-white transition-all duration-300 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-portfolio-purple/20 hover:to-portfolio-purple-light/20 hover:shadow-lg hover:shadow-purple-glow/20"
+          >
+            Portfolio
+          </button>
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
@@ -57,10 +65,10 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               <Magnet key={item.id} strength={0.2}>
                 <button
                   onClick={() => scrollToSection(item.id)}
-                  className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
+                  className="text-gray-300 hover:text-white transition-all duration-300 relative group px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-portfolio-purple/20 hover:to-portfolio-purple-light/20 hover:shadow-lg hover:shadow-purple-glow/20"
                 >
                   {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-portfolio-purple to-portfolio-cyan group-hover:w-full transition-all duration-300" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-portfolio-purple to-portfolio-purple-light group-hover:w-full transition-all duration-300" />
                 </button>
               </Magnet>
             ))}

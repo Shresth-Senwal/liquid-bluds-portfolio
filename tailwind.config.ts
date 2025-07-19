@@ -65,8 +65,10 @@ export default {
 				portfolio: {
 					bg: 'hsl(var(--portfolio-bg))',
 					purple: 'hsl(var(--portfolio-purple))',
-					cyan: 'hsl(var(--portfolio-cyan))',
-					green: 'hsl(var(--portfolio-green))',
+					'purple-light': 'hsl(var(--portfolio-purple-light))',
+					'purple-dark': 'hsl(var(--portfolio-purple-dark))',
+					accent: 'hsl(var(--portfolio-accent))',
+					gray: 'hsl(var(--portfolio-gray))',
 					grid: 'hsl(var(--portfolio-grid))'
 				}
 			},
@@ -77,7 +79,7 @@ export default {
 			},
 			boxShadow: {
 				'glow': 'var(--shadow-glow)',
-				'cyan-glow': 'var(--shadow-cyan-glow)',
+				'purple-glow': 'var(--shadow-purple-glow)',
 				'elegant': 'var(--shadow-elegant)',
 			},
 			fontFamily: {

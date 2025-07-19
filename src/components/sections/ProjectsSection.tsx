@@ -1,90 +1,129 @@
+/**
+ * ProjectsSection Component
+ * 
+ * Showcases Divye Bisaria's projects in a modern grid layout with glassmorphic cards.
+ * Features hover effects, gradient animations, and direct links to repositories.
+ */
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GradientText } from '../animated/GradientText';
-import { MagicBento } from '../animated/MagicBento';
+import { ProjectCard } from '../ui/ProjectCard';
 
 interface ProjectsSectionProps {
   className?: string;
 }
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = '' }) => {
+  // Updated with correct GitHub links from the provided information
   const projects = [
     {
       id: '1',
-      title: 'E-Commerce Platform',
-      description: 'A modern e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, and real-time order tracking.',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      size: 'large' as const,
-      color: 'purple' as const,
+      title: 'Chat with PDF Assistant',
+      description: 'An intelligent Streamlit chatbot that allows users to upload PDF documents and interact with them using natural language queries. Built with Gemini AI for accurate document analysis and question answering.',
+      tech: ['Streamlit', 'Gemini AI', 'Python', 'PDF Processing'],
+      github: 'https://github.com/rockerperfect/chat-with-pdf_Streamlit_Gemini',
+      demo: undefined,
     },
     {
       id: '2',
-      title: 'AI Chat Application',
-      description: 'Real-time chat application with AI integration using OpenAI API and WebSocket connections.',
-      tech: ['Next.js', 'OpenAI', 'WebSocket', 'Prisma'],
-      size: 'medium' as const,
-      color: 'cyan' as const,
+      title: 'MedSecure Enterprise',
+      description: 'HIPAA-compliant web platform for secure medical record exchange with end-to-end encryption (AES-GCM), multi-factor authentication, and role-based access control for healthcare professionals.',
+      tech: ['Vanilla JavaScript', 'AES-GCM', 'HIPAA Compliance', 'Security'],
+      github: 'https://github.com/rockerperfect/MedSecure',
+      demo: undefined,
     },
     {
       id: '3',
-      title: 'Task Manager',
-      description: 'Productivity app with drag-and-drop functionality and team collaboration features.',
-      tech: ['Vue.js', 'Firebase', 'Vuex'],
-      size: 'small' as const,
-      color: 'green' as const,
+      title: 'SEO Page Generator',
+      description: 'Dynamic SEO-optimized page generator using React, PostgreSQL, and Node.js, achieving <1.5s load times for 20+ auto-generated templates with comprehensive SEO optimization.',
+      tech: ['React', 'Node.js', 'PostgreSQL', 'SEO'],
+      github: 'https://github.com/rockerperfect/Seo_Page_Generation',
+      demo: undefined,
     },
     {
       id: '4',
-      title: 'Weather Dashboard',
-      description: 'Beautiful weather application with interactive charts and location-based forecasting.',
-      tech: ['React', 'D3.js', 'Weather API'],
-      size: 'small' as const,
-      color: 'purple' as const,
-    },
-    {
-      id: '5',
-      title: 'Social Media Analytics',
-      description: 'Comprehensive analytics dashboard for social media performance tracking with real-time data visualization.',
-      tech: ['React', 'Python', 'FastAPI', 'PostgreSQL'],
-      size: 'medium' as const,
-      color: 'cyan' as const,
-    },
-    {
-      id: '6',
-      title: 'Crypto Tracker',
-      description: 'Real-time cryptocurrency tracking application with portfolio management.',
-      tech: ['React Native', 'Redux', 'CoinGecko API'],
-      size: 'small' as const,
-      color: 'green' as const,
-    },
+      title: 'Node Farm',
+      description: 'Node.js & Express web server that reads from JSON, dynamically generates HTML templates, and implements routing with basic file-system operations for farm product management.',
+      tech: ['Node.js', 'Express', 'HTML Templating', 'Routing'],
+      github: 'https://github.com/rockerperfect/Node-Farm',
+      demo: undefined,
+    }
   ];
 
   return (
     <section id="projects" className={`py-20 ${className}`}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <GradientText className="text-4xl md:text-5xl font-bold" animate={false}>
+        {/* Section Header */}
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <GradientText className="text-4xl md:text-5xl font-bold mb-6" animate={false}>
             Projects & Creations
           </GradientText>
           <motion.p
-            className="text-gray-300 text-lg mt-6 max-w-2xl mx-auto"
+            className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            A showcase of my recent work, featuring innovative solutions and creative implementations
-            across various technologies and domains.
+            A showcase of innovative solutions and creative implementations across various technologies, 
+            featuring full-stack applications, AI integrations, and secure enterprise platforms.
           </motion.p>
-        </div>
+        </motion.div>
 
+        {/* Projects Grid */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <MagicBento items={projects} />
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ 
+                duration: 0.6, 
+                delay: index * 0.1,
+                ease: "easeOut"
+              }}
+            >
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                tech={project.tech}
+                github={project.github}
+                demo={project.demo}
+                className="h-full"
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Bottom decoration */}
+        <motion.div
+          className="mt-16 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+        >
+          <motion.div
+            className="inline-block w-24 h-1 bg-gradient-to-r from-transparent via-portfolio-purple to-transparent"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1 }}
+          />
         </motion.div>
       </div>
     </section>

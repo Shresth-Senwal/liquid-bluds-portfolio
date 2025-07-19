@@ -2,9 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { GradientText } from '../animated/GradientText';
 import { Magnet } from '../animated/Magnet';
-import { StarBorder } from '../animated/StarBorder';
-import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { GlassButton } from '@/components/ui/glass-button';
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 interface ContactSectionProps {
   className?: string;
@@ -15,32 +14,31 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
     { 
       name: 'GitHub', 
       icon: Github, 
-      url: 'https://github.com', 
+      url: 'https://github.com/rockerperfect', 
       color: 'hover:text-white' 
     },
     { 
       name: 'LinkedIn', 
       icon: Linkedin, 
-      url: 'https://linkedin.com', 
-      color: 'hover:text-blue-400' 
-    },
-    { 
-      name: 'Twitter', 
-      icon: Twitter, 
-      url: 'https://twitter.com', 
-      color: 'hover:text-cyan-400' 
+      url: 'https://www.linkedin.com/in/divye-bisaria-bb572b28b', 
+      color: 'hover:text-portfolio-purple-light' 
     },
     { 
       name: 'Email', 
       icon: Mail, 
-      url: 'mailto:alex@bluds.dev', 
-      color: 'hover:text-green-400' 
+      url: 'mailto:divyebisaria4106@gmail.com', 
+      color: 'hover:text-portfolio-accent' 
     },
   ];
 
   const handleDownloadCV = () => {
-    // In a real application, this would trigger a download
-    console.log('Downloading CV...');
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    link.href = '/assets/resume.pdf';
+    link.download = 'Divye_Bisaria_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -64,8 +62,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          I'm always interested in new opportunities and collaborations. 
-          Whether you have a project in mind or just want to connect, 
+          I'm always excited about new opportunities and collaborations in web development. 
+          Whether you have an internship opportunity, project idea, or just want to connect, 
           feel free to reach out!
         </motion.p>
 
@@ -78,19 +76,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           {socialLinks.map((link) => (
-            <Magnet key={link.name}>
-              <motion.a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-4 bg-white/5 rounded-full border border-white/10 text-gray-400 transition-all duration-300 ${link.color} backdrop-blur-sm group`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <link.icon className="w-6 h-6" />
-                <span className="sr-only">{link.name}</span>
-              </motion.a>
-            </Magnet>
+            <motion.a
+              key={link.name}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group relative p-4 bg-white/5 backdrop-blur-md border border-white/20 rounded-lg text-gray-400 transition-all duration-300 ${link.color} shadow-lg hover:shadow-purple-glow hover:border-white/30 hover:bg-gradient-to-r hover:from-portfolio-purple/20 hover:to-portfolio-purple-light/20 overflow-hidden`}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {/* Gradient overlay on hover */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-portfolio-purple/30 to-portfolio-purple-light/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                initial={{ opacity: 0 }}
+              />
+              <link.icon className="w-6 h-6 relative z-10" />
+              <span className="sr-only">{link.name}</span>
+            </motion.a>
           ))}
         </motion.div>
 
@@ -101,38 +103,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <StarBorder>
-            <Button
-              onClick={handleDownloadCV}
-              className="bg-transparent hover:bg-white/10 text-white border-none text-lg px-8 py-6 rounded-lg transition-all duration-300 group"
-            >
-              <motion.span
-                className="flex items-center space-x-2"
-                whileHover={{ scale: 1.05 }}
-              >
-                <span>Download CV</span>
-                <motion.div
-                  animate={{ y: [0, -2, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  ↓
-                </motion.div>
-              </motion.span>
-            </Button>
-          </StarBorder>
-        </motion.div>
-
-        {/* Copyright */}
-        <motion.div
-          className="mt-16 pt-8 border-t border-white/10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <p className="text-gray-500 text-sm">
-            © 2024 Alex Developer | bluds team member | Built with React & Framer Motion
-          </p>
+          <GlassButton
+            onClick={handleDownloadCV}
+            size="lg"
+            variant="primary"
+          >
+            <span>Download CV</span>
+            <span>↓</span>
+          </GlassButton>
         </motion.div>
       </div>
     </section>

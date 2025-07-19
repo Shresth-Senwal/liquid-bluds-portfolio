@@ -1,119 +1,319 @@
-import React, { useEffect, useRef } from 'react';
+// File: RippleGrid.tsx
+// Purpose: Animated, interactive ripple grid background for portfolio site. Integrates as a full-viewport background, supports rainbow mode, mouse interaction, and extensive customization. No external dependencies except OGL. See usage in Index.tsx.
+// Dependencies: React, OGL (Renderer, Program, Triangle, Mesh)
+// Integration: Import and use as a background component. See docstring for props.
 
-interface RippleGridProps {
-  opacity?: number;
-  gridColor?: string;
-  className?: string;
-}
+import { useRef, useEffect } from "react";
+import { Renderer, Program, Triangle, Mesh } from "ogl";
 
-export const RippleGrid: React.FC<RippleGridProps> = ({
-  opacity = 0.5,
-  gridColor = 'rgba(255, 255, 255, 0.1)',
-  className = ''
+/**
+ * RippleGrid Component
+ * @param {Object} props - Component props
+ * @param {boolean} [props.enableRainbow=false] - Enable animated rainbow color mode
+ * @param {string} [props.gridColor="#ffffff"] - Grid color (hex)
+ * @param {number} [props.rippleIntensity=0.05] - Ripple distortion intensity
+ * @param {number} [props.gridSize=10] - Grid density
+ * @param {number} [props.gridThickness=15] - Grid line thickness
+ * @param {number} [props.fadeDistance=1.5] - Fade-out distance from center
+ * @param {number} [props.vignetteStrength=2.0] - Vignette effect strength
+ * @param {number} [props.glowIntensity=0.1] - Glow effect intensity
+ * @param {number} [props.opacity=1.0] - Opacity of the grid
+ * @param {number} [props.gridRotation=0] - Grid rotation in degrees
+ * @param {boolean} [props.mouseInteraction=true] - Enable mouse ripple interaction
+ * @param {number} [props.mouseInteractionRadius=1] - Mouse ripple radius
+ * @returns {JSX.Element} Animated ripple grid background
+ * @example
+ * <RippleGrid enableRainbow gridColor="#00ffcc" />
+ */
+const RippleGrid = ({
+  enableRainbow = false,
+  gridColor = "#ffffff",
+  rippleIntensity = 0.05,
+  gridSize = 10.0,
+  gridThickness = 15.0,
+  fadeDistance = 1.5,
+  vignetteStrength = 2.0,
+  glowIntensity = 0.1,
+  opacity = 1.0,
+  gridRotation = 0,
+  mouseInteraction = true,
+  mouseInteractionRadius = 1,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
-  const ripplesRef = useRef<Array<{
-    x: number;
-    y: number;
-    radius: number;
-    maxRadius: number;
-    opacity: number;
-  }>>([]);
+  const containerRef = useRef(null);
+  const mousePositionRef = useRef({ x: 0.5, y: 0.5 });
+  const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
+  const mouseInfluenceRef = useRef(1.0); // Start with mouse influence active
+  const uniformsRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!containerRef.current) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const hexToRgb = (hex) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? [
+            parseInt(result[1], 16) / 255,
+            parseInt(result[2], 16) / 255,
+            parseInt(result[3], 16) / 255,
+          ]
+        : [1, 1, 1];
     };
 
-    const drawGrid = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const gridSize = 50;
-      ctx.strokeStyle = gridColor;
-      ctx.lineWidth = 1;
-      ctx.globalAlpha = opacity;
+    const renderer = new Renderer({
+      dpr: Math.min(window.devicePixelRatio, 2),
+      alpha: true,
+    });
+    const gl = renderer.gl;
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.canvas.style.width = "100%";
+    gl.canvas.style.height = "100%";
+    containerRef.current.appendChild(gl.canvas);
 
-      // Draw vertical lines
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
+    const vert = `
+attribute vec2 position;
+varying vec2 vUv;
+void main() {
+    vUv = position * 0.5 + 0.5;
+    gl_Position = vec4(position, 0.0, 1.0);
+}`;
 
-      // Draw horizontal lines
-      for (let y = 0; y <= canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
+    const frag = `precision highp float;
+uniform float iTime;
+uniform vec2 iResolution;
+uniform bool enableRainbow;
+uniform vec3 gridColor;
+uniform float rippleIntensity;
+uniform float gridSize;
+uniform float gridThickness;
+uniform float fadeDistance;
+uniform float vignetteStrength;
+uniform float glowIntensity;
+uniform float opacity;
+uniform float gridRotation;
+uniform bool mouseInteraction;
+uniform vec2 mousePosition;
+uniform float mouseInfluence;
+uniform float mouseInteractionRadius;
+varying vec2 vUv;
+
+float pi = 3.141592;
+
+mat2 rotate(float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    return mat2(c, -s, s, c);
+}
+
+void main() {
+    vec2 uv = vUv * 2.0 - 1.0;
+    uv.x *= iResolution.x / iResolution.y;
+
+    if (gridRotation != 0.0) {
+        uv = rotate(gridRotation * pi / 180.0) * uv;
+    }
+
+    float dist = length(uv);
+    float func = sin(pi * (iTime - dist));
+    vec2 rippleUv = uv + uv * func * rippleIntensity;
+
+    if (mouseInteraction && mouseInfluence > 0.0) {
+        vec2 mouseUv = (mousePosition * 2.0 - 1.0);
+        mouseUv.x *= iResolution.x / iResolution.y;
+        float mouseDist = length(uv - mouseUv);
+        
+        float influence = mouseInfluence * exp(-mouseDist * mouseDist / (mouseInteractionRadius * mouseInteractionRadius));
+        
+        float mouseWave = sin(pi * (iTime * 2.0 - mouseDist * 3.0)) * influence;
+        rippleUv += normalize(uv - mouseUv) * mouseWave * rippleIntensity * 0.3;
+    }
+
+    vec2 a = sin(gridSize * 0.5 * pi * rippleUv - pi / 2.0);
+    vec2 b = abs(a);
+
+    float aaWidth = 0.5;
+    vec2 smoothB = vec2(
+        smoothstep(0.0, aaWidth, b.x),
+        smoothstep(0.0, aaWidth, b.y)
+    );
+
+    vec3 color = vec3(0.0);
+    color += exp(-gridThickness * smoothB.x * (0.8 + 0.5 * sin(pi * iTime)));
+    color += exp(-gridThickness * smoothB.y);
+    color += 0.5 * exp(-(gridThickness / 4.0) * sin(smoothB.x));
+    color += 0.5 * exp(-(gridThickness / 3.0) * smoothB.y);
+
+    if (glowIntensity > 0.0) {
+        color += glowIntensity * exp(-gridThickness * 0.5 * smoothB.x);
+        color += glowIntensity * exp(-gridThickness * 0.5 * smoothB.y);
+    }
+
+    float ddd = exp(-2.0 * clamp(pow(dist, fadeDistance), 0.0, 1.0));
+    
+    vec2 vignetteCoords = vUv - 0.5;
+    float vignetteDistance = length(vignetteCoords);
+    float vignette = 1.0 - pow(vignetteDistance * 2.0, vignetteStrength);
+    vignette = clamp(vignette, 0.0, 1.0);
+    
+    vec3 t;
+    if (enableRainbow) {
+        t = vec3(
+            uv.x * 0.5 + 0.5 * sin(iTime),
+            uv.y * 0.5 + 0.5 * cos(iTime),
+            pow(cos(iTime), 4.0)
+        ) + 0.5;
+    } else {
+        t = gridColor;
+    }
+
+    float finalFade = ddd * vignette;
+    float alpha = length(color) * finalFade * opacity;
+    gl_FragColor = vec4(color * t * finalFade * opacity, alpha);
+}`;
+
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution: { value: [1, 1] },
+      enableRainbow: { value: enableRainbow },
+      gridColor: { value: hexToRgb(gridColor) },
+      rippleIntensity: { value: rippleIntensity },
+      gridSize: { value: gridSize },
+      gridThickness: { value: gridThickness },
+      fadeDistance: { value: fadeDistance },
+      vignetteStrength: { value: vignetteStrength },
+      glowIntensity: { value: glowIntensity },
+      opacity: { value: opacity },
+      gridRotation: { value: gridRotation },
+      mouseInteraction: { value: mouseInteraction },
+      mousePosition: { value: [0.5, 0.5] },
+      mouseInfluence: { value: 0 },
+      mouseInteractionRadius: { value: mouseInteractionRadius },
     };
 
-    const drawRipples = () => {
-      ripplesRef.current.forEach((ripple, index) => {
-        ctx.globalAlpha = ripple.opacity;
-        ctx.strokeStyle = 'rgba(147, 51, 234, 0.6)'; // Purple ripple
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        ctx.stroke();
+    uniformsRef.current = uniforms;
 
-        ripple.radius += 2;
-        ripple.opacity -= 0.02;
+    const geometry = new Triangle(gl);
+    const program = new Program(gl, { vertex: vert, fragment: frag, uniforms });
+    const mesh = new Mesh(gl, { geometry, program });
 
-        if (ripple.radius >= ripple.maxRadius || ripple.opacity <= 0) {
-          ripplesRef.current.splice(index, 1);
-        }
-      });
+    const resize = () => {
+      const { clientWidth: w, clientHeight: h } = containerRef.current!;
+      renderer.setSize(w, h);
+      uniforms.iResolution.value = [w, h];
     };
 
-    const animate = () => {
-      drawGrid();
-      drawRipples();
-      animationRef.current = requestAnimationFrame(animate);
+    const handleMouseMove = (e) => {
+      if (!mouseInteraction || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = 1.0 - (e.clientY - rect.top) / rect.height;
+      targetMouseRef.current = { x, y };
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (Math.random() > 0.95) { // Only create ripples occasionally
-        ripplesRef.current.push({
-          x: e.clientX,
-          y: e.clientY,
-          radius: 0,
-          maxRadius: 100,
-          opacity: 0.6
-        });
-      }
+    const handleMouseEnter = () => {
+      if (!mouseInteraction) return;
+      mouseInfluenceRef.current = 1.0;
     };
 
-    resizeCanvas();
-    animate();
+    const handleMouseLeave = () => {
+      if (!mouseInteraction) return;
+      mouseInfluenceRef.current = 0.0;
+    };
 
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("resize", resize);
+    if (mouseInteraction) {
+      containerRef.current.addEventListener("mousemove", handleMouseMove);
+      containerRef.current.addEventListener("mouseenter", handleMouseEnter);
+      containerRef.current.addEventListener("mouseleave", handleMouseLeave);
+    }
+    resize();
+
+    const render = (t) => {
+      uniforms.iTime.value = t * 0.001;
+
+      const lerpFactor = 0.1;
+      mousePositionRef.current.x +=
+        (targetMouseRef.current.x - mousePositionRef.current.x) * lerpFactor;
+      mousePositionRef.current.y +=
+        (targetMouseRef.current.y - mousePositionRef.current.y) * lerpFactor;
+
+      const currentInfluence = uniforms.mouseInfluence.value;
+      const targetInfluence = mouseInfluenceRef.current;
+      uniforms.mouseInfluence.value +=
+        (targetInfluence - currentInfluence) * 0.05;
+
+      uniforms.mousePosition.value = [
+        mousePositionRef.current.x,
+        mousePositionRef.current.y,
+      ];
+
+      renderer.render({ scene: mesh });
+      requestAnimationFrame(render);
+    };
+
+    requestAnimationFrame(render);
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      window.removeEventListener("resize", resize);
+      if (mouseInteraction && containerRef.current) {
+        containerRef.current.removeEventListener("mousemove", handleMouseMove);
+        containerRef.current.removeEventListener("mouseenter", handleMouseEnter);
+        containerRef.current.removeEventListener("mouseleave", handleMouseLeave);
       }
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
+      renderer.gl.getExtension("WEBGL_lose_context")?.loseContext();
+      containerRef.current?.removeChild(gl.canvas);
     };
-  }, [opacity, gridColor]);
+  }, []);
+
+  useEffect(() => {
+    if (!uniformsRef.current) return;
+
+    const hexToRgb = (hex) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? [
+            parseInt(result[1], 16) / 255,
+            parseInt(result[2], 16) / 255,
+            parseInt(result[3], 16) / 255,
+          ]
+        : [1, 1, 1];
+    };
+
+    uniformsRef.current.enableRainbow.value = enableRainbow;
+    uniformsRef.current.gridColor.value = hexToRgb(gridColor);
+    uniformsRef.current.rippleIntensity.value = rippleIntensity;
+    uniformsRef.current.gridSize.value = gridSize;
+    uniformsRef.current.gridThickness.value = gridThickness;
+    uniformsRef.current.fadeDistance.value = fadeDistance;
+    uniformsRef.current.vignetteStrength.value = vignetteStrength;
+    uniformsRef.current.glowIntensity.value = glowIntensity;
+    uniformsRef.current.opacity.value = opacity;
+    uniformsRef.current.gridRotation.value = gridRotation;
+    uniformsRef.current.mouseInteraction.value = mouseInteraction;
+    uniformsRef.current.mouseInteractionRadius.value = mouseInteractionRadius;
+  }, [
+    enableRainbow,
+    gridColor,
+    rippleIntensity,
+    gridSize,
+    gridThickness,
+    fadeDistance,
+    vignetteStrength,
+    glowIntensity,
+    opacity,
+    gridRotation,
+    mouseInteraction,
+    mouseInteractionRadius,
+  ]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`fixed inset-0 pointer-events-none z-0 ${className}`}
-      style={{ zIndex: 0 }}
+    <div
+      ref={containerRef}
+      className="w-full h-full absolute inset-0 z-0 pointer-events-none"
+      aria-hidden="true"
+      tabIndex={-1}
     />
   );
 };
+
+export default RippleGrid;

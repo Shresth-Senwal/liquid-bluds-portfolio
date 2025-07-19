@@ -1,6 +1,5 @@
 import React from 'react';
-import { RippleGrid } from '@/components/animated/RippleGrid';
-import { SplashCursor } from '@/components/animated/SplashCursor';
+import SplashCursor from '@/components/animated/SplashCursor';
 import { ClickSpark } from '@/components/animated/ClickSpark';
 import { Header } from '@/components/layout/Header';
 import { HeroSection } from '@/components/sections/HeroSection';
@@ -13,17 +12,14 @@ const Index = () => {
   return (
     <ClickSpark>
       <div className="relative min-h-screen">
-        {/* Global background grid */}
-        <RippleGrid opacity={0.3} />
-        
         {/* Global cursor effects */}
-        <SplashCursor />
+        <SplashCursor SPLAT_RADIUS={0.08} SPLAT_FORCE={3000} />
         
         {/* Header */}
         <Header />
         
         {/* Main content */}
-        <main className="relative z-10">
+        <main className="relative z-10 pt-20">
           <HeroSection />
           <AboutSection />
           <EducationSection />

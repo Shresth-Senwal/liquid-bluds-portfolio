@@ -24,9 +24,9 @@ export const RotatingText: React.FC<RotatingTextProps> = ({
 
   const textVariants = {
     enter: {
-      y: 20,
+      y: 15,
       opacity: 0,
-      scale: 0.9,
+      scale: 0.95,
     },
     center: {
       y: 0,
@@ -34,34 +34,31 @@ export const RotatingText: React.FC<RotatingTextProps> = ({
       scale: 1,
     },
     exit: {
-      y: -20,
+      y: -15,
       opacity: 0,
-      scale: 0.9,
+      scale: 0.95,
     },
   };
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative ${className}`} style={{ minHeight: '2rem' }}>
       <AnimatePresence mode="wait">
-        <motion.div
+        <motion.span
           key={currentIndex}
           variants={textVariants}
           initial="enter"
           animate="center"
           exit="exit"
           transition={{
-            duration: 0.5,
-            ease: "easeInOut",
+            duration: 0.8,
+            ease: [0.4, 0, 0.2, 1],
           }}
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center text-white font-medium"
+          style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))' }}
         >
-          <span className="bg-gradient-to-r from-portfolio-cyan to-portfolio-green bg-clip-text text-transparent">
-            {texts[currentIndex]}
-          </span>
-        </motion.div>
+          {texts[currentIndex]}
+        </motion.span>
       </AnimatePresence>
-      {/* Invisible placeholder to maintain height */}
-      <div className="invisible">{texts[0]}</div>
     </div>
   );
 };
