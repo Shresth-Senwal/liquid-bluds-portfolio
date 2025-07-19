@@ -8,35 +8,57 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark portfolio theme */
+    --background: 240 10% 3.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 263 70% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 240 4.8% 15.9%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 4.8% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 240 10% 3.9%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 4.8% 15.9%;
+    --input: 240 4.8% 15.9%;
+    --ring: 263 70% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Portfolio specific colors */
+    --portfolio-bg: 240 25% 2%;
+    --portfolio-purple: 263 70% 50%;
+    --portfolio-cyan: 180 100% 50%;
+    --portfolio-green: 142 76% 36%;
+    --portfolio-grid: 210 40% 98%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--portfolio-purple)), hsl(var(--portfolio-cyan)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--portfolio-cyan)), hsl(var(--portfolio-green)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--portfolio-purple)), hsl(var(--portfolio-green)));
+    
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(var(--portfolio-purple) / 0.3);
+    --shadow-cyan-glow: 0 0 40px hsl(var(--portfolio-cyan) / 0.3);
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--portfolio-purple) / 0.4);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +122,95 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    background: hsl(var(--portfolio-bg));
+    color: hsl(var(--foreground));
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  /* Portfolio specific component styles */
+  .portfolio-gradient-text {
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-flow 3s ease-in-out infinite;
+  }
+  
+  .portfolio-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .portfolio-cyan-glow {
+    box-shadow: var(--shadow-cyan-glow);
+  }
+  
+  .portfolio-elegant-shadow {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .portfolio-hover-scale {
+    transition: var(--transition-bounce);
+  }
+  
+  .portfolio-hover-scale:hover {
+    transform: scale(1.05);
+  }
+  
+  .portfolio-smooth-transition {
+    transition: var(--transition-smooth);
+  }
+}
+
+@layer utilities {
+  /* Custom keyframes for portfolio animations */
+  @keyframes gradient-flow {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--portfolio-purple) / 0.2);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(var(--portfolio-purple) / 0.4);
+    }
+  }
+  
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
 }

@@ -1,13 +1,37 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React from 'react';
+import { RippleGrid } from '@/components/animated/RippleGrid';
+import { SplashCursor } from '@/components/animated/SplashCursor';
+import { ClickSpark } from '@/components/animated/ClickSpark';
+import { Header } from '@/components/layout/Header';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { AboutSection } from '@/components/sections/AboutSection';
+import { EducationSection } from '@/components/sections/EducationSection';
+import { ProjectsSection } from '@/components/sections/ProjectsSection';
+import { ContactSection } from '@/components/sections/ContactSection';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <ClickSpark>
+      <div className="relative min-h-screen">
+        {/* Global background grid */}
+        <RippleGrid opacity={0.3} />
+        
+        {/* Global cursor effects */}
+        <SplashCursor />
+        
+        {/* Header */}
+        <Header />
+        
+        {/* Main content */}
+        <main className="relative z-10">
+          <HeroSection />
+          <AboutSection />
+          <EducationSection />
+          <ProjectsSection />
+          <ContactSection />
+        </main>
       </div>
-    </div>
+    </ClickSpark>
   );
 };
 
