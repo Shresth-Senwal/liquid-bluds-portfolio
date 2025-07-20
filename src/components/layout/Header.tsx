@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="backdrop-blur-md bg-portfolio-bg/80 border-b border-white/10">
+      <div className="backdrop-blur-sm bg-portfolio-bg/20 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <button 
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden border-t border-white/10 backdrop-blur-md bg-portfolio-bg/90"
+            className="md:hidden border-t border-white/5 backdrop-blur-sm bg-portfolio-bg/30"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

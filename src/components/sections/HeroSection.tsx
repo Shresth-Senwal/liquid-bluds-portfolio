@@ -4,7 +4,7 @@ import { GradientText } from '../animated/GradientText';
 import { RotatingText } from '../animated/RotatingText';
 import { GlassButton } from '@/components/ui/glass-button';
 import RippleGrid from '@/components/animated/RippleGrid';
-import BlurText from '../ui/BlurText';
+import ScrollReveal from '../animated/ScrollReveal';
 
 interface HeroSectionProps {
   className?: string;
@@ -27,7 +27,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
   };
 
   return (
-    <section className={`min-h-screen flex items-center justify-center relative overflow-hidden ${className}`}>
+    <section className={`min-h-screen flex items-center justify-center relative overflow-hidden py-10 ${className}`}>
       {/* Background grid - only in hero section */}
       <div className="absolute inset-0 w-full h-full">
         <RippleGrid
@@ -65,15 +65,74 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
-            Divye Bisaria
+            {/* Glitch effect for name */}
+            <span className="glitch" aria-label="Divye Bisaria">
+              Divye Bisaria
+            </span>
+        {/* Glitch effect styles */}
+        <style>{`
+          .glitch {
+            position: relative;
+            color: #fff;
+            font-family: inherit;
+            display: inline-block;
+            animation: glitch-skew 1.5s infinite linear alternate;
+          }
+          .glitch::before, .glitch::after {
+            content: attr(aria-label);
+            position: absolute;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            color: #fff;
+            background: transparent;
+          }
+          .glitch::before {
+            text-shadow: -1px 0 rgba(0,255,231,0.3), 1px 1px rgba(255,0,200,0.2);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-top 1.5s infinite linear alternate;
+          }
+          .glitch::after {
+            text-shadow: -1px 0 rgba(255,0,200,0.2), 1px 1px rgba(0,255,231,0.3);
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch-bottom 1.5s infinite linear alternate;
+          }
+          @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(2deg); }
+            60% { transform: skew(-1deg); }
+            80% { transform: skew(1deg); }
+            100% { transform: skew(0deg); }
+          }
+          @keyframes glitch-top {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-1px, -1px); }
+            80% { transform: translate(1px, 1px); }
+            100% { transform: translate(0, 0); }
+          }
+          @keyframes glitch-bottom {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(-1px, -1px); }
+            100% { transform: translate(0, 0); }
+          }
+        `}</style>
           </h1>
-          <BlurText
-            text="3rd-year B.Tech CSE student passionate about web development"
-            delay={150}
-            animateBy="words"
-            direction="top"
-            className="text-2xl mb-8 text-white"
-          />
+          <ScrollReveal
+            baseOpacity={0}
+            baseRotation={1}
+            blurStrength={6}
+            containerClassName="mb-8"
+            textClassName="text-2xl text-white"
+            delay={0.4}
+          > 
+            3rd-year B.Tech CSE student passionate about web development
+          </ScrollReveal>
         </motion.div>
 
         {/* Rotating role text */}

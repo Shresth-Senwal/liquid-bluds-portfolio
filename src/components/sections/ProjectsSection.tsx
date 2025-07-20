@@ -5,16 +5,19 @@
  * Features hover effects, gradient animations, and direct links to repositories.
  */
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { GradientText } from '../animated/GradientText';
 import { ProjectCard } from '../ui/ProjectCard';
+import ScrollReveal from '../animated/ScrollReveal';
+import { GlobalSpotlight } from '../animated/MagicBento';
 
 interface ProjectsSectionProps {
   className?: string;
 }
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = '' }) => {
+  const gridRef = useRef<HTMLDivElement>(null);
+  
   // Updated with correct GitHub links from the provided information
   const projects = [
     {
@@ -52,80 +55,62 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = ''
   ];
 
   return (
-    <section id="projects" className={`py-20 ${className}`}>
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <GradientText className="text-4xl md:text-5xl font-bold mb-6" animate={false}>
-            Projects & Creations
-          </GradientText>
-          <motion.p
-            className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+    <>
+      <GlobalSpotlight
+        gridRef={gridRef}
+        enabled={true}
+        spotlightRadius={300}
+        glowColor="132, 0, 255"
+      />
+      <section id="projects" className={`py-6 ${className}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section Header */}
+          <div 
+            className="text-center mb-12"
           >
-            A showcase of innovative solutions and creative implementations across various technologies, 
-            featuring full-stack applications, AI integrations, and secure enterprise platforms.
-          </motion.p>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                duration: 0.6, 
-                delay: index * 0.1,
-                ease: "easeOut"
-              }}
+            <ScrollReveal
+              containerClassName="text-center"
+              textClassName="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-portfolio-purple to-portfolio-accent"
+              delay={0.4}
             >
-              <ProjectCard
-                title={project.title}
-                description={project.description}
-                tech={project.tech}
-                github={project.github}
-                demo={project.demo}
-                className="h-full"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+              Projects & Creations
+            </ScrollReveal>
+            <ScrollReveal
+              baseOpacity={0.1}
+              baseRotation={-0.5}
+              blurStrength={3}
+              containerClassName="text-center"
+              textClassName="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed"
+              delay={0.4}
+            >
+              A showcase of innovative solutions and creative implementations across various technologies, 
+              featuring full-stack applications, AI integrations, and secure enterprise platforms.
+            </ScrollReveal>
+          </div>
 
-        {/* Bottom decoration */}
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          <motion.div
-            className="inline-block w-24 h-1 bg-gradient-to-r from-transparent via-portfolio-purple to-transparent"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 1 }}
-          />
-        </motion.div>
-      </div>
-    </section>
+          {/* Projects Grid */}
+          <div ref={gridRef} className="bento-section grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projects.map((project, index) => (
+              <div key={project.id} className="card">
+                <ProjectCard
+                  title={project.title}
+                  description={project.description}
+                  tech={project.tech}
+                  github={project.github}
+                  demo={project.demo}
+                  className="h-full"
+                  delay={1.6 + (index * 0.2)}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom decoration */}
+          <div className="mt-16 text-center">
+            <div className="inline-block w-24 h-1 bg-gradient-to-r from-transparent via-portfolio-purple to-transparent" />
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
