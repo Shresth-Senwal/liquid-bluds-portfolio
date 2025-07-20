@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SplashCursor from '@/components/animated/SplashCursor';
 import { ClickSpark } from '@/components/animated/ClickSpark';
@@ -9,16 +9,24 @@ import { AboutSection } from '@/components/sections/AboutSection';
 import { EducationSection } from '@/components/sections/EducationSection';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { ContactSection } from '@/components/sections/ContactSection';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { isMobileDevice } from '@/lib/responsive';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
+  const [deviceIsMobile, setDeviceIsMobile] = useState(false);
+
+  useEffect(() => {
+    setDeviceIsMobile(isMobileDevice());
+  }, []);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0f0f23]">
+    <div className="relative min-h-screen bg-[#0f0f23] overflow-x-hidden">
       <AnimatePresence mode="wait">
         {isLoading ? (
           <LoadingScreen key="loading" onLoadingComplete={handleLoadingComplete} />
@@ -36,15 +44,15 @@ const Index = () => {
           >
             <ClickSpark>
               <div className="relative min-h-screen">
-                {/* Global cursor effects */}
-                <SplashCursor SPLAT_RADIUS={0.08} SPLAT_FORCE={3000} />
+                {/* Global cursor effects - disabled on mobile for better performance */}
+                {!deviceIsMobile && <SplashCursor SPLAT_RADIUS={0.08} SPLAT_FORCE={3000} />}
                 
                 {/* Header */}
                 <Header />
                 
                 {/* Main content */}
                 <motion.main 
-                  className="relative z-10 pt-20"
+                  className="relative z-10 pt-16 sm:pt-20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.8 }}

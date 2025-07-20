@@ -2,6 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-first responsive design with automatic resolution scaling */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-size: clamp(14px, 2.5vw, 16px); /* Responsive base font size */
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* Prevent iOS text size adjustment */
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation; /* Improve touch performance */
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+  }
+  
+  /* Improve touch targets for mobile */
+  button, a, [role="button"] {
+    min-height: 44px; /* iOS recommended touch target size */
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input, select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important; /* Force 16px on mobile */
+    }
+    
+    /* Reduce motion for better mobile performance */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    /* Better scroll performance on mobile */
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Optimize text rendering on mobile */
+    body {
+      text-rendering: optimizeSpeed;
+    }
+  }
+  
+  /* High DPI display optimizations */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */

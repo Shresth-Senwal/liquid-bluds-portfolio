@@ -73,7 +73,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         `}
       </style>
       <ParticleCard
-        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/[0.05] backdrop-blur-sm border border-white/20 p-6 transition-all duration-300 hover:border-portfolio-purple/60 hover:shadow-2xl hover:shadow-portfolio-purple/20 hover:scale-[1.02] ${className} card--border-glow`}
+        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/[0.05] backdrop-blur-sm border border-white/20 p-4 sm:p-5 md:p-6 transition-all duration-300 hover:border-portfolio-purple/60 hover:shadow-2xl hover:shadow-portfolio-purple/20 hover:scale-[1.02] ${className} card--border-glow`}
         style={{
           '--glow-x': '50%',
           '--glow-y': '50%',
@@ -98,8 +98,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           baseOpacity={0}
           baseRotation={0.5}
           blurStrength={2}
-          containerClassName="mb-3"
-          textClassName="text-xl font-bold text-white group-hover:text-portfolio-purple-light transition-all duration-300"
+          containerClassName="mb-2 sm:mb-3"
+          textClassName="text-lg sm:text-xl font-bold text-white group-hover:text-portfolio-purple-light transition-all duration-300"
           delay={delay}
         >
           {title}
@@ -110,19 +110,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           baseOpacity={0.1}
           baseRotation={-0.3}
           blurStrength={1}
-          containerClassName="mb-4"
-          textClassName="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-300"
+          containerClassName="mb-3 sm:mb-4"
+          textClassName="text-gray-300 text-sm sm:text-base leading-relaxed group-hover:text-gray-200 transition-colors duration-300"
           delay={delay + 0.1}
         >
           {description}
         </ScrollReveal>
 
         {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5 md:mb-6">
           {tech.map((technology, index) => (
             <span
               key={technology}
-              className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-gray-300 group-hover:bg-gradient-to-r group-hover:from-portfolio-purple/20 group-hover:to-portfolio-purple-light/20 group-hover:text-white transition-all duration-300 hover:scale-105"
+              className="text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/10 text-gray-300 group-hover:bg-gradient-to-r group-hover:from-portfolio-purple/20 group-hover:to-portfolio-purple-light/20 group-hover:text-white transition-all duration-300 hover:scale-105"
             >
               {technology}
             </span>
@@ -130,13 +130,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           {github && (
             <a
               href={github}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-portfolio-purple/40 hover:to-portfolio-purple-light/40 text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-portfolio-purple/30 overflow-hidden group/btn"
+              className="relative flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-portfolio-purple/40 hover:to-portfolio-purple-light/40 text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-portfolio-purple/30 overflow-hidden group/btn touch-manipulation"
             >
               {/* Button shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />
@@ -150,7 +150,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               href={demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-portfolio-purple/30 to-portfolio-purple-light/30 hover:from-portfolio-purple/50 hover:to-portfolio-purple-light/50 text-white transition-all duration-300 text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-portfolio-purple/40 overflow-hidden group/btn"
+              className="relative flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-r from-portfolio-purple/30 to-portfolio-purple-light/30 hover:from-portfolio-purple/50 hover:to-portfolio-purple-light/50 text-white transition-all duration-300 text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-portfolio-purple/40 overflow-hidden group/btn touch-manipulation"
             >
               {/* Button shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />

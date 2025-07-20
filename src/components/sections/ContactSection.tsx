@@ -42,12 +42,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
   };
 
   return (
-    <section id="contact" className={`py-12 ${className}`}>
-      <div className="max-w-4xl mx-auto px-6 text-center">
+    <section id="contact" className={`py-8 sm:py-12 lg:py-16 ${className}`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div>
           <ScrollReveal
             containerClassName="text-center"
-            textClassName="text-4xl md:text-5xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-portfolio-purple to-portfolio-accent"
+            textClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-portfolio-purple to-portfolio-accent px-2"
             delay={0.4}
           >
             Get In Touch
@@ -59,7 +59,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
           baseRotation={0}
           blurStrength={3}
           containerClassName="text-center"
-          textClassName="text-gray-300 text-lg mb-12 max-w-2xl mx-auto"
+          textClassName="text-gray-300 text-base sm:text-lg mb-8 sm:mb-10 md:mb-12 max-w-4xl mx-auto px-2"
           delay={0.4}
         >
           I'm always excited about new opportunities and collaborations in web development. 
@@ -68,18 +68,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ className = '' }
         </ScrollReveal>
 
         {/* Social Links */}
-        <div className="flex justify-center space-x-8 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12 px-2">
           {socialLinks.map((link) => (
             <a
               key={link.name}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group relative p-4 bg-white/5 backdrop-blur-md border border-white/20 rounded-lg text-gray-400 transition-all duration-300 ${link.color} shadow-lg hover:shadow-purple-glow hover:border-white/30 hover:bg-gradient-to-r hover:from-portfolio-purple/20 hover:to-portfolio-purple-light/20 overflow-hidden hover:scale-110 hover:-translate-y-1`}
+              className={`group relative p-3 sm:p-4 bg-white/5 backdrop-blur-md border border-white/20 rounded-lg text-gray-400 transition-all duration-300 ${link.color} shadow-lg hover:shadow-purple-glow hover:border-white/30 hover:bg-gradient-to-r hover:from-portfolio-purple/20 hover:to-portfolio-purple-light/20 overflow-hidden hover:scale-110 hover:-translate-y-1 touch-manipulation`}
             >
               {/* Gradient overlay on hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-portfolio-purple/30 to-portfolio-purple-light/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <link.icon className="w-6 h-6 relative z-10" />
+              <link.icon className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" />
               <span className="sr-only">{link.name}</span>
             </a>
           ))}

@@ -27,7 +27,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
   };
 
   return (
-    <section className={`min-h-screen flex items-center justify-center relative overflow-hidden py-10 ${className}`}>
+    <section className={`min-h-screen flex items-center justify-center relative overflow-hidden py-8 sm:py-10 ${className}`}>
       {/* Background grid - only in hero section */}
       <div className="absolute inset-0 w-full h-full">
         <RippleGrid
@@ -57,14 +57,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-portfolio-accent/15 rounded-full filter blur-3xl" />
       </motion.div>
 
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+      <div className="relative z-10 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Name */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 text-white leading-tight">
             {/* Glitch effect for name */}
             <span className="glitch" aria-label="Divye Bisaria">
               Divye Bisaria
@@ -127,8 +127,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
             baseOpacity={0}
             baseRotation={1}
             blurStrength={6}
-            containerClassName="mb-8"
-            textClassName="text-2xl text-white"
+            containerClassName="mb-6 md:mb-8"
+            textClassName="text-lg sm:text-xl md:text-2xl text-white px-2"
             delay={0.4}
           > 
             3rd-year B.Tech CSE student passionate about web development
@@ -140,11 +140,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mb-8"
+          className="mb-6 md:mb-8"
         >
           <RotatingText 
             texts={roles}
-            className="text-xl md:text-2xl h-8 text-white font-medium"
+            className="text-lg sm:text-xl md:text-2xl h-8 md:h-10 text-white font-medium px-2"
           />
         </motion.div>
 

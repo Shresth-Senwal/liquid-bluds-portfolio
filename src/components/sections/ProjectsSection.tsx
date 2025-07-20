@@ -62,15 +62,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = ''
         spotlightRadius={300}
         glowColor="132, 0, 255"
       />
-      <section id="projects" className={`py-6 ${className}`}>
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="projects" className={`py-8 sm:py-12 lg:py-16 ${className}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div 
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
             <ScrollReveal
               containerClassName="text-center"
-              textClassName="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-portfolio-purple to-portfolio-accent"
+              textClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-portfolio-purple to-portfolio-accent px-2"
               delay={0.4}
             >
               Projects & Creations
@@ -80,7 +80,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = ''
               baseRotation={-0.5}
               blurStrength={3}
               containerClassName="text-center"
-              textClassName="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed"
+              textClassName="text-gray-300 text-base sm:text-lg max-w-4xl mx-auto leading-relaxed px-2"
               delay={0.4}
             >
               A showcase of innovative solutions and creative implementations across various technologies, 
@@ -89,7 +89,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = ''
           </div>
 
           {/* Projects Grid */}
-          <div ref={gridRef} className="bento-section grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div ref={gridRef} className="bento-section grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
             {projects.map((project, index) => (
               <div key={project.id} className="card">
                 <ProjectCard
@@ -106,8 +106,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ className = ''
           </div>
 
           {/* Bottom decoration */}
-          <div className="mt-16 text-center">
-            <div className="inline-block w-24 h-1 bg-gradient-to-r from-transparent via-portfolio-purple to-transparent" />
+          <div className="mt-12 sm:mt-14 md:mt-16 text-center">
+            <div className="inline-block w-16 sm:w-20 md:w-24 h-1 bg-gradient-to-r from-transparent via-portfolio-purple to-transparent" />
           </div>
         </div>
       </section>
